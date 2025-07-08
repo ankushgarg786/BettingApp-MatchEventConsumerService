@@ -2,6 +2,7 @@ package com.example.bettingappmatcheventconsumerservice.services;
 
 
 import com.example.bettingappmatcheventconsumerservice.events.MatchCreatedEvent;
+import com.example.bettingappmatcheventconsumerservice.events.ScoreUpdateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -18,4 +19,10 @@ public class MatchEventListener {
         log.info("→ Start Time: {}", event.getStartTime());
         log.info("→ Status: {}", event.getStatus());
     }
+    @KafkaListener(topics = "score-updates", groupId = "score-update-consumer-group")
+    public void consumeScoreUpdate(ScoreUpdateEvent event) {
+        System.out.println("📥 Score Update for Match ID " + event.getMatchId() + ": " + event.getScoreSummary());
+        // In the future: update DB or broadcast to frontend via WebSocket
+    }
+
 }
